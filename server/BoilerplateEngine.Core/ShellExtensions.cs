@@ -4,24 +4,10 @@ namespace BoilerplateEngine.Core
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;
+    using System.Text;
 
     public static class ShellExtensions
     {
-        public static void DeleteDirectory(string directory)
-        {
-            string cmd;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                cmd = $"rmdir {directory} /S /Q";
-            }
-            else
-            {
-                cmd = $"rm -rf {directory}";
-            }
-
-            cmd.Execute();
-        }
-
         public async static Task DeleteDirectoryAsync(string directory)
         {
             string cmd;
@@ -55,11 +41,7 @@ namespace BoilerplateEngine.Core
             
                 var error = process.StandardError.ReadToEnd();            
                 
-                while (!process.StandardOutput.EndOfStream)
-                {
-                    string line = process.StandardOutput.ReadLine();
-                    Console.WriteLine(line);
-                }
+                
                 
 
                 if (process.ExitCode != 0)
@@ -97,6 +79,8 @@ namespace BoilerplateEngine.Core
                 process.StartInfo = GetBashStartInfo(cmd);
             }
 
+            var result = new StringBuilder();
+
             process.Exited += (sender, args) =>
             {
                 if (process.ExitCode != 0)
@@ -107,11 +91,19 @@ namespace BoilerplateEngine.Core
                 }
                 else
                 {
-                    tcs.SetResult(process.StandardOutput.ReadToEnd());
+                    tcs.SetResult(result);
                 }
                 process.Dispose();
             };
+
+            process.OutputDataReceived += (sender, args) =>
+            {
+                Console.WriteLine(args.Data);
+                result.AppendLine(args.Data);
+            };
+
             process.Start();
+            process.BeginOutputReadLine();
             return tcs.Task;
         }
 

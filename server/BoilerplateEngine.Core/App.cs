@@ -16,16 +16,13 @@ namespace BoilerplateEngine.Core
             _name = name;
         }
 
-        public virtual void Create()
+        public virtual async Task CreateAsync()
         {
         }
 
-        public void Cleanup()
+        public async Task CleanAsync()
         {
-            ShellExtensions.DeleteDirectory($".{Path.DirectorySeparatorChar}{_temp}");
-            // Task.Run(async () => {
-            //     await ShellExtensions.DeleteDirectoryAsync($".{Path.DirectorySeparatorChar}{_temp}");
-            // });
+            await ShellExtensions.DeleteDirectoryAsync($".{Path.DirectorySeparatorChar}{_temp}");
         }
 
         public void Zip()

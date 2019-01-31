@@ -5,10 +5,11 @@
     using BoilerplateEngine.Core;
     using BoilerplateEngine.Core.BackEnd;
     using BoilerplateEngine.Core.FrontEnd;
+    using System.Threading.Tasks;
 
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("What app to create?");
             Console.WriteLine("r - react, d - dotnet");
@@ -18,10 +19,10 @@
             switch(key.Key)
             {
                 case ConsoleKey.R:
-                    CreateReact();
+                    await CreateReact();
                     break;
                 case ConsoleKey.D:
-                    CreateDotnet();
+                    await CreateDotnet();
                     break;
                 default:
                     Console.WriteLine($"Wrong key pressed: {key.KeyChar}");
@@ -33,10 +34,10 @@
             Console.ReadKey();
         }
 
-        static void CreateReact()
+        static async Task CreateReact()
         {
             var react = new ReactApp("test-app", true);
-            react.Create();
+            await react.CreateAsync();
 
             Console.WriteLine("Project created!");
 
@@ -47,13 +48,13 @@
             Console.WriteLine("Press any key to delete the directory");
             Console.ReadKey();
 
-            react.Cleanup();
+            await react.CleanAsync();
         }
 
-        static void CreateDotnet()
+        static async Task CreateDotnet()
         {
             var dotnet = new DotnetApp("TestApp", "classlib");
-            dotnet.Create();
+            await dotnet.CreateAsync();
 
             Console.WriteLine("Project created!");
 
@@ -64,7 +65,7 @@
             Console.WriteLine("Press any key to delete the directory");
             Console.ReadKey();
 
-            dotnet.Cleanup();
+            await dotnet.CleanAsync();
         }
     }
 }

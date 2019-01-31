@@ -15,16 +15,15 @@ namespace BoilerplateEngine.Core.FrontEnd
             _useTypescript = useTypescript;
         }
 
-        public override void Create()
+        public override async Task CreateAsync()
         {
             string typescript = _useTypescript ? "--typescript" : string.Empty;
             var cmd = $"yarn create react-app {OutputDirectory} {typescript}";
-            cmd.Execute();
-            ShellExtensions.DeleteDirectory($"{OutputDirectory}{Path.DirectorySeparatorChar}node_modules");
 
-            // Task.Run(async () => {
-            //     await ShellExtensions.DeleteDirectoryAsync($".{Path.DirectorySeparatorChar}{_temp}");
-            // });
+            await cmd.ExecuteAsync();
+
+            Console.WriteLine("Removing node modules that 'create-react-app' created...");
+            await ShellExtensions.DeleteDirectoryAsync($"{OutputDirectory}{Path.DirectorySeparatorChar}node_modules");
         }
     }
 }

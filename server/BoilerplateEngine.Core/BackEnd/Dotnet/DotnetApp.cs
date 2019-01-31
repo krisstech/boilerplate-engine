@@ -4,6 +4,7 @@ namespace BoilerplateEngine.Core.BackEnd
     using System;
     using System.IO;
     using System.IO.Compression;
+    using System.Threading.Tasks;
 
     public class DotnetApp: App
     {
@@ -15,10 +16,10 @@ namespace BoilerplateEngine.Core.BackEnd
             _type = type;
         }
 
-        public override void Create()
+        public override async Task CreateAsync()
         {
             var cmd = $"dotnet new {_type} -n {_name} -o {OutputDirectory}";
-            cmd.Execute();
+            await cmd.ExecuteAsync();
         }
     }
 }
