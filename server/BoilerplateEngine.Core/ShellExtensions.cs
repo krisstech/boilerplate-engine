@@ -2,9 +2,27 @@ namespace BoilerplateEngine.Core
 {
     using System;
     using System.Diagnostics;
+    using System.Runtime.InteropServices;
 
     public static class ShellExtensions
     {
+        public static string Execute(this string cmd)
+        {
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return cmd.ExecuteCmd();
+                }
+
+                return cmd.ExecuteBash();
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException("Add correct exception handling for failed commands", ex);
+            }
+        }
+
         public static string ExecuteBash(this string cmd)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");

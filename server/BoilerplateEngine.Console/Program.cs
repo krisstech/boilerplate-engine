@@ -3,24 +3,17 @@
     using System;
     using System.Runtime.InteropServices;
     using BoilerplateEngine.Core;
+    using BoilerplateEngine.Core.BackEnd;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var cmd = "echo 'test'";
+            var dotnet = new DotnetApp("TestApp", "classlib");
+            dotnet.Create();
+            // var result = cmd.Execute();
 
-            string result;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                result = cmd.ExecuteCmd();
-            }
-            else {
-
-                result = cmd.ExecuteBash();
-            }
-            
-            Console.WriteLine(result);
+            // Console.WriteLine(result);
 
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
