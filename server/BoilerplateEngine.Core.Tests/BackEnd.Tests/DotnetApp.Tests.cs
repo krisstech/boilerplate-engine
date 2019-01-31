@@ -12,7 +12,7 @@ namespace BoilerplateEngine.Core.Tests
 
         public DotnetAppTests()
         {
-            _dotnet = new DotnetApp("TestApp", "classlib");
+            _dotnet = new DotnetApp("TestApp", DotnetNewTemplates.ClassLib);
         }
 
         [Fact]

@@ -53,7 +53,7 @@
 
         static async Task CreateDotnet()
         {
-            var dotnet = new DotnetApp("TestApp", "classlib");
+            var dotnet = new DotnetApp("TestApp", DotnetNewTemplates.ClassLib);
             await dotnet.CreateAsync();
 
             Console.WriteLine("Project created!");
