@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
-// interface IFormProps {
-//     test?: any;
-// }
+import { saveAs } from 'file-saver';
+import { Spinner } from '.';
 
 interface IFormState {
     name: string;
     // template: 'classlib' | 'webapi' | 'console'
-    template: string
+    template: string,
+    loading: boolean
 }
 
 const templates = [
@@ -23,7 +22,8 @@ export default class DotnetForm extends Component<{}, IFormState> {
 
         this.state = {
             name: '',
-            template: 'classlib'
+            template: 'classlib',
+            loading: false
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -48,6 +48,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         // console.log('A name was submitted: ' + this.state.name);
         console.log('Starting request...')
+        this.setState({loading: true})
 
         const apiUrl = 'http://localhost:5000/api';
         axios
@@ -61,20 +62,32 @@ export default class DotnetForm extends Component<{}, IFormState> {
                     responseType: 'blob'
                 }
             )
-            .then(function (response) {
+            .then((response) => {
                 console.log(response);
+                let disposition = response.headers["content-disposition"];
+                let filename = "";
 
-                // This works but is stupid as it creates an additional html element
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `DotnetZipFile.zip`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                if (disposition && disposition.indexOf("attachment") !== -1) {
+                    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+                        matches = filenameRegex.exec(disposition);
+            
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, "");
+                    }
+                }
+
+                if (!filename)
+                {
+                    filename = "DotnetAppStarter.zip"
+                }
+
+                saveAs(new Blob([response.data]), filename);
+
+                this.setState({loading: false});
             })
-            .catch(function (error) {
+            .catch((error) => {
                 console.log(error);
+                this.setState({loading: false});
             });
 
         event.preventDefault();
@@ -86,23 +99,26 @@ export default class DotnetForm extends Component<{}, IFormState> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>
-                        Name: 
-                        <input type="text" value={this.state.name} onChange={this.handleNameChange} onKeyUp={this.handleKeyUp} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Type: 
-                        <select name="templates" onChange={this.handleTemplateChange}>
-                            {templates.map(template => <option value={template}>{template}</option>)}
-                        </select>
-                    </label>
-                </div>
-                <input type="submit" value="Submit" />
-            </form>
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <div>
+                        <label>
+                            Name: 
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange} onKeyUp={this.handleKeyUp} />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Type: 
+                            <select name="templates" onChange={this.handleTemplateChange}>
+                                {templates.map(template => <option value={template}>{template}</option>)}
+                            </select>
+                        </label>
+                    </div>
+                    <input type="submit" value="Submit" />
+                </form>
+                {this.state.loading ? <Spinner /> : ""}
+            </div>
         );
     }
 }

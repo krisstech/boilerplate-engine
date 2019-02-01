@@ -28,32 +28,11 @@ namespace BoilerplateEngine.API.Controllers
             var zipBytes = await System.IO.File.ReadAllBytesAsync(dotnet.ZipPath);
 
             const string contentType = "application/zip";
-            HttpContext.Response.ContentType = contentType;
+            Response.ContentType = contentType;
+
             var result = new FileContentResult(zipBytes, contentType)
             {
-                FileDownloadName = "DownlaodTest.zip"
-            };
-
-            // Start cleanup, but don't wait for it
-            dotnet.CleanAsync();
-
-            return result;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DownloadTest()
-        {
-            var dotnet = new DotnetApp("DownlaodTest", DotnetNewTemplates.Console);
-            await dotnet.CreateAsync();
-            dotnet.Zip();
-
-            var zipBytes = await System.IO.File.ReadAllBytesAsync(dotnet.ZipPath);
-
-            const string contentType = "application/zip";
-            HttpContext.Response.ContentType = contentType;
-            var result = new FileContentResult(zipBytes, contentType)
-            {
-                FileDownloadName = "DownlaodTest.zip"
+                FileDownloadName = $"{dotnet.Name}.zip"
             };
 
             // Start cleanup, but don't wait for it

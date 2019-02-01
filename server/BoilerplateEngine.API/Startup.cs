@@ -36,6 +36,7 @@ namespace BoilerplateEngine.API
             app.UseCors(builder =>
                 builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
+                        .WithExposedHeaders("Content-Disposition")
                 );
 
             if (env.IsDevelopment())

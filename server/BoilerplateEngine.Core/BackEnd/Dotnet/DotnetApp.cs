@@ -11,7 +11,7 @@ namespace BoilerplateEngine.Core.BackEnd
         readonly string _type;
 
         public DotnetApp(string name, string type)
-            :base(name)
+            :base(name.ValidateDotnetName())
         {
             _type = type;
         }

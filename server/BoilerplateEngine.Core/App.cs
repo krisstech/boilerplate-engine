@@ -16,9 +16,7 @@ namespace BoilerplateEngine.Core
             _name = name;
         }
 
-        public virtual async Task CreateAsync()
-        {
-        }
+        public abstract Task CreateAsync();
 
         public async Task CleanAsync()
         {
@@ -32,5 +30,6 @@ namespace BoilerplateEngine.Core
 
         public string OutputDirectory => $".{Path.DirectorySeparatorChar}{_temp}{Path.DirectorySeparatorChar}{_name}";
         public string ZipPath => $"{OutputDirectory}.zip";
+        public string Name => _name;
     }
 }
