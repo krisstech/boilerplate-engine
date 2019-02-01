@@ -1,46 +1,37 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Spinner } from '.';
+import { Spinner } from '..';
 
 interface IFormState {
     name: string;
-    // template: 'classlib' | 'webapi' | 'console'
-    template: string,
+    useTypescript: boolean,
     loading: boolean
 }
 
-const templates = [
-    'classlib',
-    'webapi',
-    'console'
-]
-
-export default class DotnetForm extends Component<{}, IFormState> {
+export default class ReactForm extends Component<{}, IFormState> {
     constructor(props: any) {
         super(props);
 
         this.state = {
             name: '',
-            template: 'classlib',
+            useTypescript: true,
             loading: false
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this);
-        this.handleTemplateChange = this.handleTemplateChange.bind(this);
+        this.handleTypescriptChange = this.handleTypescriptChange.bind(this);
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({name: event.target.value})
     }
 
-    handleTemplateChange(event: React.ChangeEvent<HTMLSelectElement>) {
-        // console.log(event.target.value);
+    handleTypescriptChange(event: React.ChangeEvent<HTMLSelectElement>) {
         this.setState(
             {
-                template: event.target.value
+                useTypescript: event.target.value === 'true'
             }
         )
     }
@@ -53,10 +44,10 @@ export default class DotnetForm extends Component<{}, IFormState> {
         const apiUrl = 'http://localhost:5000/api';
         axios
             .post(
-                `${apiUrl}/dotnet`,
+                `${apiUrl}/react`,
                 {
                     name: this.state.name,
-                    template: this.state.template
+                    useTypescript: this.state.useTypescript
                 },
                 {
                     responseType: 'blob'
@@ -78,7 +69,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
 
                 if (!filename)
                 {
-                    filename = "DotnetAppStarter.zip"
+                    filename = "ReactAppStarter.zip"
                 }
 
                 saveAs(new Blob([response.data]), filename);
@@ -93,25 +84,22 @@ export default class DotnetForm extends Component<{}, IFormState> {
         event.preventDefault();
     }
 
-    handleKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-        console.log('This was typed: ' + this.state.name);
-    }
-
     render() {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <div>
                         <label>
-                            Name: 
-                            <input type="text" value={this.state.name} onChange={this.handleNameChange} onKeyUp={this.handleKeyUp} />
+                            Name:
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Type: 
-                            <select name="templates" onChange={this.handleTemplateChange}>
-                                {templates.map(template => <option value={template}>{template}</option>)}
+                            Typescript?:
+                            <select name="templates" onChange={this.handleTypescriptChange}>
+                                <option key={1} value="true">Yes</option>
+                                <option key={2} value="false">No</option>
                             </select>
                         </label>
                     </div>
