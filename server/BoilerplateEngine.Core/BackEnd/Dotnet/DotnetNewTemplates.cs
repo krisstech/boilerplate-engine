@@ -5,5 +5,12 @@
         public const string ClassLib = "classlib";
         public const string WebApi = "webapi";
         public const string Console = "console";
+
+        public static readonly string[] Values = 
+        {
+            "classlib",
+            "webapi",
+            "console"
+        };
     }
 }

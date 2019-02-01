@@ -14,8 +14,30 @@ namespace BoilerplateEngine.API.Controllers
     {
         // POST: api/Dotnet
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] DotnetModel model)
         {
+            if (!DotnetNewTemplates.Values.Any(value => value == model.Template))
+            {
+                return new BadRequestResult();
+            }
+
+            var dotnet = new DotnetApp(model.Name, model.Template);
+            await dotnet.CreateAsync();
+            dotnet.Zip();
+
+            var zipBytes = await System.IO.File.ReadAllBytesAsync(dotnet.ZipPath);
+
+            const string contentType = "application/zip";
+            HttpContext.Response.ContentType = contentType;
+            var result = new FileContentResult(zipBytes, contentType)
+            {
+                FileDownloadName = "DownlaodTest.zip"
+            };
+
+            // Start cleanup, but don't wait for it
+            dotnet.CleanAsync();
+
+            return result;
         }
 
         [HttpGet]
