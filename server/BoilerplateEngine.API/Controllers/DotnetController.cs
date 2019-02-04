@@ -21,8 +21,16 @@ namespace BoilerplateEngine.API.Controllers
                 return new BadRequestResult();
             }
 
+            // Build App
             var dotnet = new DotnetApp(model.Name, model.Template);
             await dotnet.CreateAsync();
+
+            if (model.UseSwagger && model.Template == DotnetNewTemplates.WebApi)
+            {
+                await dotnet.AddSwagger();
+            }
+
+            // ZIP App
             dotnet.Zip();
 
             var zipBytes = await System.IO.File.ReadAllBytesAsync(dotnet.ZipPath);

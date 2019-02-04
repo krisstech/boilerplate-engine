@@ -53,10 +53,13 @@
 
         static async Task CreateDotnet()
         {
-            var dotnet = new DotnetApp("TestApp", DotnetNewTemplates.ClassLib);
+            var dotnet = new DotnetApp("TestApp", DotnetNewTemplates.WebApi);
             await dotnet.CreateAsync();
 
             Console.WriteLine("Project created!");
+            Console.WriteLine("Adding Swagger UI");
+            await dotnet.AddSwagger();
+            
 
             Console.WriteLine("Press any key to zip the directory");
             Console.ReadKey();

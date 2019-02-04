@@ -7,6 +7,7 @@ interface IFormState {
     name: string;
     // template: 'classlib' | 'webapi' | 'console'
     template: string,
+    useSwagger: boolean,
     loading: boolean
 }
 
@@ -23,6 +24,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
         this.state = {
             name: '',
             template: 'classlib',
+            useSwagger: true,
             loading: false
         }
 
@@ -30,6 +32,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleTemplateChange = this.handleTemplateChange.bind(this);
+        this.handleSwaggerChange = this.handleSwaggerChange.bind(this);
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -45,6 +48,14 @@ export default class DotnetForm extends Component<{}, IFormState> {
         )
     }
 
+    handleSwaggerChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState(
+            {
+                useSwagger: event.target.value === 'true'
+            }
+        )
+    }
+
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         // console.log('A name was submitted: ' + this.state.name);
         console.log('Starting request...')
@@ -56,7 +67,8 @@ export default class DotnetForm extends Component<{}, IFormState> {
                 `${apiUrl}/dotnet`,
                 {
                     name: this.state.name,
-                    template: this.state.template
+                    template: this.state.template,
+                    useSwagger: this.state.useSwagger
                 },
                 {
                     responseType: 'blob'
@@ -115,6 +127,22 @@ export default class DotnetForm extends Component<{}, IFormState> {
                             </select>
                         </label>
                     </div>
+                    {
+                        this.state.template === 'webapi'
+                        ?
+                        <div>
+                            <label>
+                                Use Swagger UI?:
+                                <select name="templates" onChange={this.handleSwaggerChange}>
+                                    <option key={1} value="true">Yes</option>
+                                    <option key={2} value="false">No</option>
+                                </select>
+                            </label>
+                        </div> 
+                        :
+                        null
+                    }
+                    
                     <input type="submit" value="Submit" />
                 </form>
                 {this.state.loading ? <Spinner /> : ""}
