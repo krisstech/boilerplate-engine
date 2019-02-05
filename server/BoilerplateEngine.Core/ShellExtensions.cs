@@ -23,6 +23,28 @@ namespace BoilerplateEngine.Core
             await cmd.ExecuteAsync();
         }
 
+        public async static Task MakeDirectoryAsync(string directory)
+        {
+            var cmd = $"mkdir {directory}";
+
+            await cmd.ExecuteAsync();
+        }
+
+        public async static Task RenameDirectory(string oldName, string newName)
+        {
+            string cmd;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                cmd = $"REN {oldName} {newName}";
+            }
+            else
+            {
+                cmd = $"mv {oldName} {newName}";
+            }
+
+            await cmd.ExecuteAsync();
+        }
+
         public static string Execute(this string cmd)
         {
             var process = new Process();

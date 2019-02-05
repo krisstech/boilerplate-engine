@@ -12,7 +12,7 @@
         static async Task Main(string[] args)
         {
             Console.WriteLine("What app to create?");
-            Console.WriteLine("r - react, d - dotnet");
+            Console.WriteLine("r - react, d - dotnet, a - angular, v - Vue");
             var key = Console.ReadKey();
             Console.WriteLine();
 
@@ -23,6 +23,12 @@
                     break;
                 case ConsoleKey.D:
                     await CreateDotnet();
+                    break;
+                case ConsoleKey.A:
+                    await CreateAngular();
+                    break;
+                case ConsoleKey.V:
+                    await CreateVue();
                     break;
                 default:
                     Console.WriteLine($"Wrong key pressed: {key.KeyChar}");
@@ -51,6 +57,40 @@
             await react.CleanAsync();
         }
 
+        static async Task CreateAngular()
+        {
+            var angular = new AngularApp("test-app");
+            await angular.CreateAsync();
+
+            Console.WriteLine("Project created!");
+
+            Console.WriteLine("Press any key to zip the directory");
+            Console.ReadKey();
+            angular.Zip();
+
+            Console.WriteLine("Press any key to delete the directory");
+            Console.ReadKey();
+
+            await angular.CleanAsync();
+        }
+
+        static async Task CreateVue()
+        {
+            var vue = new VueApp("test-app");
+            await vue.CreateAsync();
+
+            Console.WriteLine("Project created!");
+
+            Console.WriteLine("Press any key to zip the directory");
+            Console.ReadKey();
+            vue.Zip();
+
+            Console.WriteLine("Press any key to delete the directory");
+            Console.ReadKey();
+
+            await vue.CleanAsync();
+        }
+
         static async Task CreateDotnet()
         {
             var dotnet = new DotnetApp("TestApp", DotnetNewTemplates.WebApi);
@@ -59,6 +99,8 @@
             Console.WriteLine("Project created!");
             Console.WriteLine("Adding Swagger UI");
             await dotnet.AddSwagger();
+
+            await dotnet.AddEfCore(EfCoreEngines.SQLServer);
             
 
             Console.WriteLine("Press any key to zip the directory");
