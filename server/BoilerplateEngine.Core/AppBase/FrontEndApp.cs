@@ -6,12 +6,12 @@ namespace BoilerplateEngine.Core
     using System.IO.Compression;
     using System.Threading.Tasks;
 
-    public abstract class App
+    public abstract class FrontEndApp
     {
         protected readonly string _name;
         protected readonly string _temp = $"temp-{Guid.NewGuid().ToString()}";
 
-        public App(string name)
+        public FrontEndApp(string name)
         {
             _name = name;
         }
@@ -28,8 +28,9 @@ namespace BoilerplateEngine.Core
             ZipFile.CreateFromDirectory(OutputDirectory, ZipPath);
         }
 
-        public string OutputDirectory => $".{Path.DirectorySeparatorChar}{_temp}{Path.DirectorySeparatorChar}{_name}";
+        public string OutputDirectory => $"{TempDir}{Path.DirectorySeparatorChar}{_name}";
         public string ZipPath => $"{OutputDirectory}.zip";
         public string Name => _name;
+        public string TempDir => $".{Path.DirectorySeparatorChar}{_temp}";
     }
 }

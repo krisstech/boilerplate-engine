@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import { DotnetForm, ReactForm } from '.';
+import { DotnetForm, ReactForm, AngularForm } from '.';
 import FormSelectBase from './FormSelectBase';
 
 const forms = {
     react: 'React',
-    dotnet: 'DotNet'
+    dotnet: 'DotNet',
+    angular: 'Angular'
 }
 
 interface IFormState {
@@ -42,6 +43,13 @@ export default class FormBase extends Component<{}, IFormState> {
                     <div>
                         <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
                         <ReactForm />
+                    </div>
+                )
+            case 'angular':
+                return (
+                    <div>
+                        <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
+                        <AngularForm />
                     </div>
                 )
         }

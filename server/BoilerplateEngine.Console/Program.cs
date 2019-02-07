@@ -7,12 +7,15 @@
     using BoilerplateEngine.Core.FrontEnd;
     using System.Threading.Tasks;
 
+    using System.IO;
+    using System.IO.Compression;
+
     class Program
     {
         static async Task Main(string[] args)
         {
             Console.WriteLine("What app to create?");
-            Console.WriteLine("r - react, d - dotnet, a - angular, v - Vue");
+            Console.WriteLine("r - react, d - dotnet, a - angular, v - Vue, f - full-stack app");
             var key = Console.ReadKey();
             Console.WriteLine();
 
@@ -29,6 +32,9 @@
                     break;
                 case ConsoleKey.V:
                     await CreateVue();
+                    break;
+                case ConsoleKey.F:
+                    await CreateFullStack();
                     break;
                 default:
                     Console.WriteLine($"Wrong key pressed: {key.KeyChar}");
@@ -111,6 +117,40 @@
             Console.ReadKey();
 
             await dotnet.CleanAsync();
+        }
+
+        static async Task CreateFullStack()
+        {
+            var server = new DotnetApp("test-server", DotnetNewTemplates.WebApi);
+
+            await server.CreateAsync();
+
+            string tempDir = server.TempDir;
+
+            string appDir = $"{tempDir}{Path.DirectorySeparatorChar}app";
+            if (!Directory.Exists(appDir))
+                Directory.CreateDirectory(appDir);
+
+            string serverDir = $"{appDir}{Path.DirectorySeparatorChar}server";
+            Directory.Move(server.OutputDirectory, serverDir);
+
+
+            // client
+            var client = new AngularApp("test-client");
+
+            await client.CreateAsync();
+
+            string clientDir = $"{appDir}{Path.DirectorySeparatorChar}client";
+            Directory.Move(client.OutputDirectory, clientDir);
+
+            ZipFile.CreateFromDirectory($"{appDir}", $"{appDir}.zip");
+            
+            Console.WriteLine("App created and zipped, press any key to delete...");
+            Console.ReadKey();
+
+            // cleanup
+            await client.CleanAsync();
+            await server.CleanAsync();
         }
     }
 }

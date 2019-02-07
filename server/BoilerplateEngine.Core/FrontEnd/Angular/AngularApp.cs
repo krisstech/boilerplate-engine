@@ -5,7 +5,7 @@ namespace BoilerplateEngine.Core.FrontEnd
     using System.IO;
     using System.IO.Compression;
     using System.Threading.Tasks;
-    public class AngularApp: App
+    public class AngularApp: FrontEndApp
     {
         public AngularApp(string name)
             :base(name.ValidateReactName())

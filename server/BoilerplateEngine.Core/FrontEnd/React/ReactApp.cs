@@ -5,7 +5,7 @@ namespace BoilerplateEngine.Core.FrontEnd
     using System.IO;
     using System.IO.Compression;
     using System.Threading.Tasks;
-    public class ReactApp: App
+    public class ReactApp: FrontEndApp
     {
         readonly bool _useTypescript;
 

@@ -7,7 +7,7 @@ namespace BoilerplateEngine.Core.FrontEnd
     using System.Threading.Tasks;
     using System.Text;
 
-    public class VueApp: App
+    public class VueApp: FrontEndApp
     {
         public VueApp(string name)
             :base(name.ValidateReactName())

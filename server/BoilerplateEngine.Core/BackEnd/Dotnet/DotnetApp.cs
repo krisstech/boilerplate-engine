@@ -10,7 +10,7 @@ namespace BoilerplateEngine.Core.BackEnd
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
 
-    public class DotnetApp: App
+    public class DotnetApp: BackEndApp
     {
         readonly string _type;
 

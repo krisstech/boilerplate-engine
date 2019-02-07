@@ -1,8 +1,7 @@
 namespace BoilerplateEngine.API
 {
-    public class ReactModel
+    public class AngularModel : IClientModel
     {
         public string Name { get; set; }
-        public bool UseTypescript { get; set; }
     }
 }
