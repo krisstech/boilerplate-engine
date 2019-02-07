@@ -1,6 +1,6 @@
 namespace BoilerplateEngine.API
 {
-    public class AngularModel : IClientModel
+    public class AngularModel
     {
         public string Name { get; set; }
     }

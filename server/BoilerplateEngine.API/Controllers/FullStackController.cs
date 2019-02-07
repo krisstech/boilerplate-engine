@@ -20,42 +20,27 @@ namespace BoilerplateEngine.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] FullStackModel model)
         {
-            var server = CreateServer(model.Server, model.ServerType);
+            var server = CreateServer(model.ServerModel, model.ServerType);
+            var client = CreateClient(model.ClientModel, model.ClientType);
 
-            await server.CreateAsync();
+            var app = new FullStackApp(model.Name, client, server);
 
-            string tempDir = server.TempDir;
+            await app.CreateAsync();
 
-            string appDir = $"{tempDir}{Path.DirectorySeparatorChar}app";
-            if (!Directory.Exists(appDir))
-                Directory.CreateDirectory(appDir);
-
-            string serverDir = $"{appDir}{Path.DirectorySeparatorChar}server";
-            Directory.Move(server.OutputDirectory, serverDir);
-
-            // client
-            var client = CreateClient(model.Client, model.ClientType);
-
-            await client.CreateAsync();
-
-            string clientDir = $"{appDir}{Path.DirectorySeparatorChar}client";
-            Directory.Move(client.OutputDirectory, clientDir);
-
-            ZipFile.CreateFromDirectory($"{appDir}", $"{appDir}.zip");
+            app.Zip();
             
-            var zipBytes = await System.IO.File.ReadAllBytesAsync($"{appDir}.zip");
+            var zipBytes = await System.IO.File.ReadAllBytesAsync(app.ZipPath);
 
             const string contentType = "application/zip";
             Response.ContentType = contentType;
 
             var result = new FileContentResult(zipBytes, contentType)
             {
-                FileDownloadName = $"full-stack-app.zip"
+                FileDownloadName = $"{app.Name}.zip"
             };
 
             // cleanup
-            client.CleanAsync();
-            server.CleanAsync();
+            app.CleanAsync();
 
             return result;
         }

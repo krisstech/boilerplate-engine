@@ -1,6 +1,6 @@
 namespace BoilerplateEngine.API
 {
-    public class VueModel : IClientModel
+    public class VueModel
     {
         public string Name { get; set; }
     }

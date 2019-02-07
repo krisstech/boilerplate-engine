@@ -4,13 +4,10 @@ namespace BoilerplateEngine.API
     using Newtonsoft.Json.Linq;
     public class FullStackModel
     {
-        // public IClientModel Client { get; set; }
-        // public dynamic Client { get; set; }
-        public JObject Client { get; set; }
+        public string Name { get; set; }
+        public JObject ClientModel { get; set; }
         public string ClientType { get; set; }
-        // public IServerModel Server { get; set; }
-        // public dynamic Server { get; set; }
-        public JObject Server { get; set; }
+        public JObject ServerModel { get; set; }
         public string ServerType { get; set; }
     }
 }
