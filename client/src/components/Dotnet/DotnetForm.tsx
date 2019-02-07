@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import { Spinner } from '..';
+import WebApiForm from './WebApi/WebApiForm';
 
 interface IFormState {
     name: string;
     // template: 'classlib' | 'webapi' | 'console'
     template: string,
     useSwagger: boolean,
+    useEfCore: boolean,
     loading: boolean
 }
 
@@ -25,6 +27,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
             name: '',
             template: 'classlib',
             useSwagger: true,
+            useEfCore: false,
             loading: false
         }
 
@@ -33,6 +36,7 @@ export default class DotnetForm extends Component<{}, IFormState> {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleTemplateChange = this.handleTemplateChange.bind(this);
         this.handleSwaggerChange = this.handleSwaggerChange.bind(this);
+        this.handleUseEFCore = this.handleUseEFCore.bind(this);
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -52,6 +56,14 @@ export default class DotnetForm extends Component<{}, IFormState> {
         this.setState(
             {
                 useSwagger: event.target.value === 'true'
+            }
+        )
+    }
+
+    handleUseEFCore(event: React.ChangeEvent<HTMLSelectElement>) {
+        this.setState(
+            {
+                useEfCore: event.target.value === 'true'
             }
         )
     }
@@ -128,18 +140,11 @@ export default class DotnetForm extends Component<{}, IFormState> {
                         </label>
                     </div>
                     {
-                        this.state.template === 'webapi'
-                        ?
-                        <div>
-                            <label>
-                                Use Swagger UI?:
-                                <select name="templates" onChange={this.handleSwaggerChange}>
-                                    <option key={1} value="true">Yes</option>
-                                    <option key={2} value="false">No</option>
-                                </select>
-                            </label>
-                        </div> 
-                        :
+                        this.state.template === 'webapi' ?
+                        <WebApiForm 
+                            handleEfCoreChange={this.handleUseEFCore}
+                            handleSwaggerChange={this.handleSwaggerChange}
+                        /> :
                         null
                     }
                     
