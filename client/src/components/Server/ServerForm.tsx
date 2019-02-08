@@ -1,27 +1,14 @@
 import React, {Component} from 'react';
-import { DotnetForm } from '..';
-import FormSelectBase from '../Shared/FormSelectBase';
-
-const forms = {
-    dotnet: 'DotNet',
-}
-
-interface IFormState {
-  form: string;
-}
+import DotnetForm from './Dotnet/DotnetForm';
 
 interface IFromProps {
-  partial?: boolean;
-  onChange?: (event:any) => void;
+  onChange: (event:any) => void;
+  framework: string;
 }
 
-export default class ServerForm extends Component<IFromProps, IFormState> {
+export default class ServerForm extends Component<IFromProps, {}> {
     constructor(props: IFromProps) {
         super(props);
-
-        this.state = {
-            form: ''
-        }
 
         this.handleFormChange = this.handleFormChange.bind(this);
     }
@@ -40,22 +27,13 @@ export default class ServerForm extends Component<IFromProps, IFormState> {
     }
 
     render() {
-        
-        switch(this.state.form)
-        {
-          case 'dotnet':
-            return (
-              <div>
-                <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
-                <DotnetForm partial={this.props.partial} onChange={this.props.onChange}/>
-              </div>
-            )
-        }
-
-        return (
-          <div>
-            <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
-          </div>
-        )
+      switch(this.props.framework) {
+        case 'dotnet':
+          return (
+            <div>
+              <DotnetForm onChange={this.props.onChange}/>
+            </div>
+          )
+      }
     }
 }

@@ -1,13 +1,9 @@
-import DotnetForm from './Server/Dotnet/DotnetForm';
-import ReactForm from './Client/React/ReactForm';
-import Spinner from './Shared/Spinner'
-import AngularForm from './Client/Angular/AngularForm';
-import Form from './Form';
+import ClientForm from './Client/ClientForm';
+import ServerForm from './Server/ServerForm';
+import StepperForm from './StepperForm';
 
 export {
-    DotnetForm,
-    ReactForm,
-    AngularForm,
-    Spinner,
-    Form
+    ClientForm,     
+    ServerForm,
+    StepperForm
 }

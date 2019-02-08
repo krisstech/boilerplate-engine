@@ -1,28 +1,15 @@
 import React, {Component} from 'react';
-import { ReactForm, AngularForm } from '..';
-import FormSelectBase from '../Shared/FormSelectBase';
-
-const forms = {
-    react: 'React',
-    angular: 'Angular'
-}
-
-interface IFormState {
-  form: string;
-}
+import ReactForm from './React/ReactForm';
+import AngularForm from './Angular/AngularForm';
 
 interface IFromProps {
-  partial?: boolean;
-  onChange?: (event:any) => void
+  onChange: (event:any) => void
+  framework: string;
 }
 
-export default class ClientForm extends Component<IFromProps, IFormState> {
+export default class ClientForm extends Component<IFromProps, {}> {
     constructor(props: IFromProps) {
         super(props);
-
-        this.state = {
-            form: ''
-        }
 
         this.handleFormChange = this.handleFormChange.bind(this);
     }
@@ -41,29 +28,22 @@ export default class ClientForm extends Component<IFromProps, IFormState> {
     }
 
     render() {
-        
-        switch(this.state.form)
+
+        switch(this.props.framework)
         {
             case 'react':
                 return (
                     <div>
-                        <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
-                        <ReactForm partial={this.props.partial} onChange={this.props.onChange}/>
+                        <ReactForm onChange={this.props.onChange}/>
                     </div>
                 )
             case 'angular':
                 return (
                     <div>
-                        <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
-                        <AngularForm partial={this.props.partial} onChange={this.props.onChange}/>
+                        <AngularForm onChange={this.props.onChange}/>
                     </div>
                 )
         }
-
-        return (
-            <div>
-                <FormSelectBase forms={Object.keys(forms)} handleFormChange={this.handleFormChange} />
-            </div>
-        )
+        
     }
 }

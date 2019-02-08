@@ -1,10 +1,10 @@
 import React from 'react';
-import { Form } from '../components';
-
+import { StepperForm } from '../components';
+import { Typography } from '@material-ui/core';
 
 export default () => (
     <div>
-        <h1>Hello home</h1>
-        <Form />
+        <Typography component="h2" variant="h1" gutterBottom>Boilerplate Engine</Typography>
+        <StepperForm />
     </div>
 );
