@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Spinner } from '..';
+import { Spinner } from '../..';
 import WebApiForm from './WebApi/WebApiForm';
 
 interface IFormState {
@@ -13,14 +13,19 @@ interface IFormState {
     loading: boolean
 }
 
+interface IFromProps {
+    partial?: boolean,
+    onChange?: (event:any) => void
+}
+
 const templates = [
     'classlib',
     'webapi',
     'console'
 ]
 
-export default class DotnetForm extends Component<{}, IFormState> {
-    constructor(props: any) {
+export default class DotnetForm extends Component<IFromProps, IFormState> {
+    constructor(props: IFromProps) {
         super(props);
 
         this.state = {
@@ -33,23 +38,57 @@ export default class DotnetForm extends Component<{}, IFormState> {
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleTemplateChange = this.handleTemplateChange.bind(this);
         this.handleSwaggerChange = this.handleSwaggerChange.bind(this);
         this.handleUseEFCore = this.handleUseEFCore.bind(this);
+
+        if (props.onChange)
+        {
+            props.onChange(
+                {
+                    serverModel: {
+                        name: this.state.name,
+                        template: 'webapi',
+                        useSwagger: this.state.useSwagger,
+                        useEfCore: this.state.useEfCore,
+                    }
+                }
+            )
+        }
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({name: event.target.value})
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    serverModel: {
+                        name: event.target.value
+                    }
+                }
+            )
+        }
     }
 
     handleTemplateChange(event: React.ChangeEvent<HTMLSelectElement>) {
-        // console.log(event.target.value);
         this.setState(
             {
                 template: event.target.value
             }
         )
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    serverModel: {
+                        template: event.target.value
+                    }
+                }
+            )
+        }
     }
 
     handleSwaggerChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -58,6 +97,17 @@ export default class DotnetForm extends Component<{}, IFormState> {
                 useSwagger: event.target.value === 'true'
             }
         )
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    serverModel: {
+                        useSwagger: event.target.value === 'true'
+                    }
+                }
+            )
+        }
     }
 
     handleUseEFCore(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -66,6 +116,17 @@ export default class DotnetForm extends Component<{}, IFormState> {
                 useEfCore: event.target.value === 'true'
             }
         )
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    serverModel: {
+                        useEfCore: event.target.value === 'true'
+                    }
+                }
+            )
+        }
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -117,18 +178,44 @@ export default class DotnetForm extends Component<{}, IFormState> {
         event.preventDefault();
     }
 
-    handleKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-        console.log('This was typed: ' + this.state.name);
-    }
-
     render() {
+        if (this.props.partial)
+        {
+            return (
+                <div>
+                    <div>
+                        <label>
+                            Name: 
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Type: 
+                            <select name="templates" onChange={this.handleTemplateChange}>
+                                {templates.map(template => <option value={template}>{template}</option>)}
+                            </select>
+                        </label>
+                    </div>
+                    {
+                        this.state.template === 'webapi' ?
+                        <WebApiForm 
+                            handleEfCoreChange={this.handleUseEFCore}
+                            handleSwaggerChange={this.handleSwaggerChange}
+                        /> :
+                        null
+                    }
+                </div>
+            );
+        }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <div>
                         <label>
                             Name: 
-                            <input type="text" value={this.state.name} onChange={this.handleNameChange} onKeyUp={this.handleKeyUp} />
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
                         </label>
                     </div>
                     <div>

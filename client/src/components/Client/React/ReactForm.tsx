@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Spinner } from '..';
+import { Spinner } from '../..';
 
 interface IFormState {
     name: string;
@@ -9,8 +9,13 @@ interface IFormState {
     loading: boolean
 }
 
-export default class ReactForm extends Component<{}, IFormState> {
-    constructor(props: any) {
+interface IFromProps {
+    partial?: boolean
+    onChange?: (event:any) => void;
+}
+
+export default class ReactForm extends Component<IFromProps, IFormState> {
+    constructor(props: IFromProps) {
         super(props);
 
         this.state = {
@@ -22,10 +27,33 @@ export default class ReactForm extends Component<{}, IFormState> {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTypescriptChange = this.handleTypescriptChange.bind(this);
+
+        if (props.onChange)
+        {
+            props.onChange(
+                {
+                    clientModel: {
+                        name: this.state.name,
+                        useTypescript: this.state.useTypescript
+                    }
+                }
+            )
+        }
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({name: event.target.value})
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    clientModel: {
+                        name: event.target.value
+                    }
+                }
+            )
+        }
     }
 
     handleTypescriptChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -34,6 +62,17 @@ export default class ReactForm extends Component<{}, IFormState> {
                 useTypescript: event.target.value === 'true'
             }
         )
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    clientModel: {
+                        useTypescript: event.target.value === 'true'
+                    }
+                }
+            )
+        }
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -85,6 +124,29 @@ export default class ReactForm extends Component<{}, IFormState> {
     }
 
     render() {
+        if (this.props.partial)
+        {
+            return (
+                <div>
+                    <div>
+                        <label>
+                            Name:
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Typescript?:
+                            <select name="templates" onChange={this.handleTypescriptChange}>
+                                <option key={1} value="true">Yes</option>
+                                <option key={2} value="false">No</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>

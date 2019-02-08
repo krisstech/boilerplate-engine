@@ -1,13 +1,13 @@
-import DotnetForm from './Dotnet/DotnetForm';
-import ReactForm from './React/ReactForm';
+import DotnetForm from './Server/Dotnet/DotnetForm';
+import ReactForm from './Client/React/ReactForm';
 import Spinner from './Shared/Spinner'
-import FormBase from './FormBase';
-import AngularForm from './Angular/AngularForm';
+import AngularForm from './Client/Angular/AngularForm';
+import Form from './Form';
 
 export {
     DotnetForm,
     ReactForm,
     AngularForm,
     Spinner,
-    FormBase
+    Form
 }

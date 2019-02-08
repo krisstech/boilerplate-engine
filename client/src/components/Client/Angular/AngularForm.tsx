@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Spinner } from '..';
+import { Spinner } from '../..';
 
 interface IFormState {
     name: string;
-    loading: boolean
+    loading: boolean;
 }
 
-export default class AngularForm extends Component<{}, IFormState> {
-    constructor(props: any) {
+interface IFromProps {
+    partial?: boolean;
+    onChange?: (event:any) => void;
+}
+
+export default class AngularForm extends Component<IFromProps, IFormState> {
+    constructor(props: IFromProps) {
         super(props);
 
         this.state = {
@@ -19,10 +24,32 @@ export default class AngularForm extends Component<{}, IFormState> {
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+        if (props.onChange)
+        {
+            props.onChange(
+                {
+                    clientModel: {
+                        name: this.state.name
+                    }
+                }
+            )
+        }
     }
 
     handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({name: event.target.value})
+
+        if (this.props.onChange)
+        {
+            this.props.onChange(
+                {
+                    clientModel: {
+                        name: event.target.value
+                    }
+                }
+            )
+        }
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -73,6 +100,21 @@ export default class AngularForm extends Component<{}, IFormState> {
     }
 
     render() {
+        if (this.props.partial)
+        {
+            return (
+                <div>
+                    <div>
+                        <label>
+                            Name:
+                            <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+                        </label>
+                    </div>
+                    <input type="submit" value="Submit" />
+                </div>
+            );
+        }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
