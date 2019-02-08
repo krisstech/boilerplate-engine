@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import WebApiForm from './WebApi/WebApiForm';
+import { TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 interface IFormState {
     name: string;
@@ -124,20 +125,27 @@ export default class DotnetForm extends Component<IFromProps, IFormState> {
     render() {
         return (
             <div>
-                <div>
-                    <label>
-                        Name: 
-                        <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Type: 
-                        <select name="templates" onChange={this.handleTemplateChange}>
-                            {templates.map(template => <option value={template}>{template}</option>)}
-                        </select>
-                    </label>
-                </div>
+                <TextField
+                    id="s-name"
+                    label="Server Name"
+                    value={this.state.name}
+                    onChange={this.handleNameChange}
+                    margin="normal"
+                />
+                
+                <FormControl style={{minWidth: '200px'}}>
+                    <InputLabel htmlFor="template">Select Template</InputLabel>
+                    <Select
+                        value={this.state.template}
+                        onChange={this.handleTemplateChange}
+                        inputProps={{
+                        name: 'template',
+                        id: 'template',
+                        }}
+                    >
+                        {templates.map(template => <MenuItem value={template}>{template}</MenuItem>)}
+                    </Select>
+                </FormControl>
                 {
                     this.state.template === 'webapi' ?
                     <WebApiForm 

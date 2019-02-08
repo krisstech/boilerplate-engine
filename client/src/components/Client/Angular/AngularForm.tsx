@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TextField } from '@material-ui/core';
 
 interface IFormState {
     name: string;
@@ -47,14 +48,14 @@ export default class AngularForm extends Component<IFromProps, IFormState> {
 
     render() {
         return (
-            <div>
-                <div>
-                    <label>
-                        Name:
-                        <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-                    </label>
-                </div>
-            </div>
+
+            <TextField
+                id="c-name"
+                label="Client Name"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+                margin="normal"
+            />
         );
     }
 }

@@ -12,7 +12,7 @@ import ServerForm from './Server/ServerForm';
 import { Spinner } from './Shared';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Grid } from '@material-ui/core';
+import { Grid, InputLabel, Select, TextField, MenuItem, FormControl } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -28,12 +28,8 @@ const styles = (theme: Theme) => createStyles({
   resetContainer: {
     padding: theme.spacing.unit * 3,
   },
-  gridRoot: {
-    flexGrow: 1,
-  },
-  gridPaper: {
-    height: 200,
-    width: 400,
+  formControl: {
+    minWidth: '200px'
   }
 });
 
@@ -235,19 +231,39 @@ class StepperForm extends Component<IProps, IState> {
 
   getClientFrameworkSelect() {
     return (
-      <select name="SelectClientFramework" onChange={this.onClientFrameworkChanged} value={this.state.clientFramework}>
-        <option value=""></option>
-        {clientFrameworks.map(value => <option value={value}>{value}</option>)}
-      </select>
+      <FormControl className={this.props.classes.formControl}>
+        <InputLabel htmlFor="select-client">Select client</InputLabel>
+        <Select
+          value={this.state.clientFramework}
+          onChange={this.onClientFrameworkChanged}
+          inputProps={{
+            name: 'client',
+            id: 'select-client',
+          }}
+        >
+          <MenuItem value=""></MenuItem>
+          {clientFrameworks.map(value => <MenuItem value={value}>{value}</MenuItem>)}
+        </Select>
+      </FormControl>
     )
   }
 
   getServerFrameworkSelect() {
     return (
-      <select name="SelectServerFramework" onChange={this.onServerFrameworkChanged} value={this.state.serverFramework}>
-        <option value=""></option>
-        {serverFrameworks.map(value => <option value={value}>{value}</option>)}
-      </select>
+      <FormControl className={this.props.classes.formControl}>
+        <InputLabel htmlFor="select-server">Select server</InputLabel>
+        <Select
+          value={this.state.serverFramework}
+          onChange={this.onServerFrameworkChanged}
+          inputProps={{
+            name: 'server',
+            id: 'select-server',
+          }}
+        >
+          <MenuItem value=""></MenuItem>
+          {serverFrameworks.map(value => <MenuItem value={value}>{value}</MenuItem>)}
+        </Select>
+      </FormControl>
     )
   }
 
@@ -257,11 +273,20 @@ class StepperForm extends Component<IProps, IState> {
         return (
           <div>
             <Typography>You can opt to create either a client, server or full-stack app template</Typography>
-            <select name="SelectStack" onChange={this.onAppTypeChanged} value={this.state.appType}>
-              <option value=""></option>
-              {appTypes.map(value => <option value={value}>{value}</option>)}
-            </select>
-
+            <FormControl className={this.props.classes.formControl}>
+              <InputLabel htmlFor="select-stack">Select stack</InputLabel>
+              <Select
+                value={this.state.appType}
+                onChange={this.onAppTypeChanged}
+                inputProps={{
+                  name: 'stack',
+                  id: 'select-stack',
+                }}
+              >
+                <MenuItem value=""></MenuItem>
+                {appTypes.map(value => <MenuItem value={value}>{value}</MenuItem>)}
+              </Select>
+            </FormControl>
           </div>
         );
       case 1:
@@ -324,16 +349,17 @@ class StepperForm extends Component<IProps, IState> {
                 <Typography>Fill in the details for the selected frameworks</Typography>
                 <Grid container spacing={16} >
                   <Grid item xs={12} >
-                    <div>
-                      <label>
-                          App Name: 
-                          <input type="text" value={this.state.fullStackName} onChange={this.onFSNameChange} />
-                      </label>
-                    </div>
+                    <TextField
+                      id="fs-name"
+                      label="App Name"
+                      value={this.state.fullStackName}
+                      onChange={this.onFSNameChange}
+                      margin="normal"
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Typography>Client</Typography>
+                    <Typography variant="h5" gutterBottom>Client</Typography>
                     <ClientForm 
                       framework={this.state.clientFramework}
                       onChange={this.onClientFormChange}
@@ -341,7 +367,7 @@ class StepperForm extends Component<IProps, IState> {
                   </Grid>
 
                   <Grid item xs={6}>
-                  <Typography>Server</Typography>
+                  <Typography variant="h5" gutterBottom>Server</Typography>
                     <ServerForm 
                       framework={this.state.serverFramework}
                       onChange={this.onServerFormChange}

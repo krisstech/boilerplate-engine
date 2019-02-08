@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 interface IFormState {
     name: string;
@@ -71,21 +72,27 @@ export default class ReactForm extends Component<IFromProps, IFormState> {
     render() {
         return (
             <div>
-                <div>
-                    <label>
-                        Name:
-                        <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Typescript?:
-                        <select name="templates" onChange={this.handleTypescriptChange}>
-                            <option key={1} value="true">Yes</option>
-                            <option key={2} value="false">No</option>
-                        </select>
-                    </label>
-                </div>
+
+                <TextField
+                    id="c-name"
+                    label="Client Name"
+                    value={this.state.name}
+                    onChange={this.handleNameChange}
+                    margin="normal"
+                />
+                <FormControl style={{minWidth: '200px'}}>
+                    <InputLabel htmlFor="use-typescript">Use Typescript</InputLabel>
+                    <Select
+                        onChange={this.handleTypescriptChange}
+                        inputProps={{
+                        name: 'typescript',
+                        id: 'use-typescript',
+                        }}
+                    >
+                        <MenuItem key={1} value="true">Yes</MenuItem>
+                        <MenuItem key={2} value="false">no</MenuItem>
+                    </Select>
+                </FormControl>
             </div>
         );
     }
