@@ -16,7 +16,7 @@ import { Grid, InputLabel, Select, TextField, MenuItem, FormControl } from '@mat
 
 const styles = (theme: Theme) => createStyles({
   root: {
-    width: '90%',
+    width: '100%',
   },
   button: {
     marginTop: theme.spacing.unit,
