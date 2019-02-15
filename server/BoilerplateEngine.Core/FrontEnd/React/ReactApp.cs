@@ -10,7 +10,7 @@ namespace BoilerplateEngine.Core.FrontEnd
         readonly bool _useTypescript;
 
         public ReactApp(string name, bool useTypescript)
-            :base(name.ValidateReactName())
+            :base(name.ValidateJavascriptName())
         {
             _useTypescript = useTypescript;
         }

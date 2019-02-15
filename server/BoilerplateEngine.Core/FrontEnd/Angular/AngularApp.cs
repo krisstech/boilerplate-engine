@@ -8,7 +8,7 @@ namespace BoilerplateEngine.Core.FrontEnd
     public class AngularApp: FrontEndApp
     {
         public AngularApp(string name)
-            :base(name.ValidateReactName())
+            :base(name.ValidateJavascriptName())
         {
         }
 

@@ -10,7 +10,7 @@ namespace BoilerplateEngine.Core.FrontEnd
     public class VueApp: FrontEndApp
     {
         public VueApp(string name)
-            :base(name.ValidateReactName())
+            :base(name.ValidateJavascriptName())
         {
         }
 

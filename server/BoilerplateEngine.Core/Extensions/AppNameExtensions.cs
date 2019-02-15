@@ -2,7 +2,7 @@ namespace BoilerplateEngine.Core
 {
     public static class AppNameExtensions
     {
-        public static string ValidateReactName(this string name)
+        public static string ValidateJavascriptName(this string name)
         {
             if (string.IsNullOrEmpty(name))
             {

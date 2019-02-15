@@ -15,14 +15,14 @@ namespace BoilerplateEngine.Core.BackEnd
         readonly string _type;
 
         public DotnetApp(string name, string type)
-            :base(name.ValidateDotnetName())
+            :base(name.ValidateJavascriptName())
         {
             _type = type;
         }
 
         public override async Task CreateAsync()
         {
-            var cmd = $"dotnet new {_type} -n {_name} -o {OutputDirectory}";
+            var cmd = $"npx express-generator .";
             await cmd.ExecuteAsync();
         }
 

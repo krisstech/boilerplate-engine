@@ -15,7 +15,7 @@
         static async Task Main(string[] args)
         {
             Console.WriteLine("What app to create?");
-            Console.WriteLine("r - react, d - dotnet, a - angular, v - Vue, f - full-stack app");
+            Console.WriteLine("r - react, d - dotnet, a - angular, v - Vue, f - full-stack app, e - express");
             var key = Console.ReadKey();
             Console.WriteLine();
 
@@ -35,6 +35,9 @@
                     break;
                 case ConsoleKey.F:
                     await CreateFullStack();
+                    break;
+                case ConsoleKey.E:
+                    await CreateExpress();
                     break;
                 default:
                     Console.WriteLine($"Wrong key pressed: {key.KeyChar}");
@@ -117,6 +120,23 @@
             Console.ReadKey();
 
             await dotnet.CleanAsync();
+        }
+
+        static async Task CreateExpress()
+        {
+            var express = new ExpressApp("test-app");
+            await express.CreateAsync();
+
+            Console.WriteLine("Project created!");            
+
+            Console.WriteLine("Press any key to zip the directory");
+            Console.ReadKey();
+            express.Zip();
+
+            Console.WriteLine("Press any key to delete the directory");
+            Console.ReadKey();
+
+            await express.CleanAsync();
         }
 
         static async Task CreateFullStack()
